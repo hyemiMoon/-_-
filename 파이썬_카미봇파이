@@ -1,4 +1,150 @@
-Thonny 사이트 : https://thonny.org/
+창의와교육 : https://happycreative.co.kr/manual/detail.php?idx=37#818
 
-복잡한 설정이 필요 없는, 
-심플한  파이썬 프로그램 편집기
+[3.14 카미봇파이 자료]
+1. Thonny 
+-사이트 : https://thonny.org/
+-복잡한 설정이 필요 없는, 심플한  파이썬 프로그램 편집기
+*카미봇 파이 Tonny IDE 설치 다운로드 URL : https://kamibot314.github.io/
+  -압축 해제 후  C: 드라이브에 이동  (경로에 한글X , 폴더명 한글 X)
+  -Thonny.bat 실행
+
+2. 카미봇 파이 동글 드라이버
+-다운로드 URL : http://kamibot.com/lib/piblock-ai/
+-압축해제 후 설치 CDM21228_ Setup.exe’ 실행
+
+3. 카미봇파이 연결  동작 확인 하기
+
+from pyKamipi.pibot import *
+
+# 객채생성, 동글 COM 포트 설정 ,  통신속도 57600
+kamibot = KamibotPi('COM3',57600)
+
+kamibot.turn_led(255,0,0)
+kamibot.delay(0.5)
+kamibot.turn_led(0,255,0)
+kamibot.delay(0.5)
+
+#카미봇 연결 해제
+kamibot.close()
+
+4. 예제 코드
+
+*** 음악연주 
+from pyKamipi.pibot import *
+
+# 객채생성, 동글 COM 포트 설정 ,  통신속도 57600
+kamibot = KamibotPi('COM3',57600)
+
+# 3옥타브 도 -> 48
+#학교종이 땡땡땡
+melody = [55,55,57,57,55,55,52,55,55,52,52,50,55,55,57,57,55,55,52,55,52,50,52,48]
+palyT= [0.5,0.5,0.5,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,1.5,0.5,0.5,0.5,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,1.5]
+
+for i,j in zip(melody, palyT):
+     kamibot.melody(i,j)
+
+kamibot.close() #카미봇 연결 해제
+
+
+*** 꽃잎 한장
+from pyKamipi.pibot import *
+
+# 객채생성, 동글 COM 포트 설정 ,  통신속도 57600
+kamibot = KamibotPi('COM3',57600)
+
+kamibot.draw_arc(3, 60,1)
+kamibot.turn_right_speed(120,150)
+kamibot.draw_arc(3, 60,1)
+
+#카미봇 연결 해제
+kamibot.close()
+
+
+*** 꽃
+from pyKamipi.pibot import *
+
+# 객채생성, 동글 COM 포트 설정 ,  통신속도 57600
+kamibot = KamibotPi('COM3',57600)
+
+kamibot.draw_arc(10, 50, 1)
+
+for i in range(9):
+    kamibot.draw_arc(3, 60,1)
+    kamibot.turn_right_speed(120,150)
+    kamibot.draw_arc(3, 60,1)
+    kamibot.turn_left_speed(202,150)
+
+#카미봇 연결 해제
+kamibot.close()
+
+
+*** 손 따라다니는 로봇
+from pyKamipi.pibot import *
+
+kamibot = KamibotPi('COM3',57600)
+
+while True:
+    left, right = kamibot.get_object_detect()    # 근접센서 왼쪽, 오른쪽 값 읽기
+    print(f"left={left}, right={right}")               # 근접센서 값 출력 하기
+
+    if left > 100 and right > 100:                  # 왼쪽, 오른쪽 둘다 감지 되면서 손이 가까이 있을때
+        kamibot.stop()
+
+    elif left > 20 and right >20:                    # 왼쪽, 오른쪽 둘다 감지 되면 앞으로 이동
+        kamibot.go_forward_speed(30, 30)
+
+    elif left > 20 and  right < 10 :                 # 왼쪽 센서에 손이 감지되면  왼쪽으로 회전
+        kamibot.go_forward_speed(0, 30)
+
+    elif right > 20 and left < 10 :                   # 오른쪽 센서에 손이 감지되면 오른쪽으로 회전
+        kamibot.go_forward_speed(30, 0)
+    else:                                                    # 모든 조건이 만족 안할때  정지
+        kamibot.stop()
+
+kamibot.close()
+
+
+
+*** 컬러 인식 로봇
+from pyKamipi.pibot import *
+
+kamibot = KamibotPi('COM3',57600)
+
+while True:
+    color = kamibot.get_color_elements()  # 컬러센서값 저장
+    print(f"color={color}")		        #	컬러센서값 출력
+
+    
+# 센서 닫기
+kamibot.get_color_sensor(False)
+
+#카미봇 연결 해제
+kamibot.close()
+
+
+*** 라인트레이싱
+from pyKamipi.pibot import *
+
+kamibot = KamibotPi('COM3',57600)
+
+while True:
+    left, center, right = kamibot.get_line_sensor()
+    print(f"left={left}, center={center}, right={right}")
+
+    if center == 1:
+        kamibot.go_forward_speed(30, 30)
+    elif left == 1:
+        kamibot.go_forward_speed(0, 30)
+    elif right == 1:
+        kamibot.go_forward_speed(30, 0)
+
+#카미봇 연결 해제
+kamibot.close()
+
+
+
+
+
+
+
+
